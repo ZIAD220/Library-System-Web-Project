@@ -1,5 +1,4 @@
 from django.db import models
-from datetime import datetime,timedelta
 
 class Book(models.Model):
     category= [
@@ -19,6 +18,3 @@ class Book(models.Model):
         return str(self.name)
     class Meta:
         ordering=['isbn']
-
-def get_expiry():
-    return datetime.today() + timedelta(days=15)

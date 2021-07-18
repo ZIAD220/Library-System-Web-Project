@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 from .models import Book
-from .forms import CreateAdminForm
+from .forms import CreateSignupForm, UserUpdateForm
 
 def index(request):
     return render(request, 'pages/index.html')
@@ -14,11 +14,12 @@ def aboutus(request):
     return render(request, 'pages/aboutus.html')
 
 def adminsignup(request):
-    form=CreateAdminForm()
+    form=CreateSignupForm()
     if request.method == 'POST':
-        form = CreateAdminForm(request.POST)
+        form = CreateSignupForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request,'Account created successfully')
             return redirect('adminlogin')
     context={'form1':form}
     return render(request, 'pages/adminsignup.html',context)
@@ -35,6 +36,17 @@ def adminlogin(request):
             messages.info(request,'Username or Password is incorrect')
     return render(request, 'pages/adminlogin.html')
 
+def studentsignup(request):
+    form=CreateSignupForm()
+    if request.method == 'POST':
+        form = CreateSignupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request,'Account created successfully')
+            return redirect('studentlogin')
+    context={'form2':form}
+    return render(request, 'pages/studentsignup.html',context)
+
 def studentlogin(request):
     if request.method=='POST':
         username = request.POST.get('username')
@@ -47,19 +59,21 @@ def studentlogin(request):
             messages.info(request,'Username or Password is incorrect')
     return render(request, 'pages/studentlogin.html')
 
-def studentsignup(request):
-    form=CreateAdminForm()
-    if request.method == 'POST':
-        form = CreateAdminForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('studentlogin')
-    context={'form2':form}
-    return render(request, 'pages/studentsignup.html',context)
-
 def logoutuser(request):
     logout(request)
     return redirect('index')
+
+def updateuser(request):
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST,instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request,'Account information updated successfully')
+            return redirect('updateuser')
+    else:
+        form = UserUpdateForm(instance=request.user)
+    context = {'form3':form}
+    return render(request, 'pages/updateuser.html',context)
 
 @login_required(login_url='adminlogin')
 def adminpage(request):
