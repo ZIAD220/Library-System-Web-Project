@@ -2,11 +2,11 @@ from django.db import models
 
 class Book(models.Model):
     category= [
-        ('education', 'Education'),
-        ('entertainment', 'Entertainment'),
-        ('comics', 'Comics'),
-        ('biography', 'Biographie'),
-        ('history', 'History'),
+        ('Education', 'Education'),
+        ('Entertainment', 'Entertainment'),
+        ('Comics', 'Comics'),
+        ('Biography', 'Biographie'),
+        ('History', 'History'),
         ]
     name=models.CharField(max_length=30)
     isbn=models.PositiveIntegerField()

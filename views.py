@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 from .models import Book
 from .forms import CreateSignupForm, UserUpdateForm
+from.filters import BookFilter
 
 def index(request):
     return render(request, 'pages/index.html')
@@ -100,7 +101,9 @@ def viewissuedbook(request):
     return render(request,'pages/viewissuedbook.html')
 
 def viewbook(request):
-    books=Book.objects.all()
-    count=Book.objects.all().count()
-    context={'books':books,'count':count}
+    books = Book.objects.all()
+    count = Book.objects.all().count()
+    myFilter = BookFilter(request.GET,queryset=books)
+    books = myFilter.qs
+    context={'books':books,'count':count,'myFilter':myFilter}
     return render(request, 'pages/viewbook.html',context)
