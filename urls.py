@@ -1,3 +1,4 @@
+from django.contrib.auth import logout
 from django.urls import path
 from .import views
 
@@ -8,8 +9,9 @@ urlpatterns = [
     path('adminsignup', views.adminsignup, name='adminsignup'),
     path('studentlogin', views.studentlogin, name='studentlogin'),
     path('studentsignup', views.studentsignup, name='studentsignup'),
-    path('adminpage', views.adminafterlogin, name='adminafterlogin'),
-    path('studentpage', views.studentafterlogin, name='studentafterlogin'),
+    path('logout',views.logoutuser, name='logout'),
+    path('adminpage', views.adminpage, name='adminpage'),
+    path('studentpage', views.studentpage, name='studentpage'),
     path('bookadded', views.bookadded, name='bookadded'),
     path('bookissued', views.bookissued, name='bookissued'),
     path('issuebook', views.issuebook, name='issuebook'),
