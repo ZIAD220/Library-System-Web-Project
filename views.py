@@ -1,11 +1,13 @@
 from django.shortcuts import render,redirect
+from .models import *
+from .forms import BookForm, CreateAdminForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
-# Create your views here.
 from .models import Book
 from .forms import CreateSignupForm, UserUpdateForm
+# Create your views here.
 from.filters import BookFilter
 
 def index(request):
@@ -107,3 +109,13 @@ def viewbook(request):
     books = myFilter.qs
     context={'books':books,'count':count,'myFilter':myFilter}
     return render(request, 'pages/viewbook.html',context)
+def viewbook(request):
+    if request.method == 'POST':
+        add_book = BookForm(request.POST)
+        if add_book.is_valid:
+            add_book.save()
+    return render(request, 'pages/viewbook.html',{'books':Book.objects.all()})
+
+def addBook(request):
+    context = {'form' : BookForm()}
+    return render(request, 'pages/addbook.html', context)
