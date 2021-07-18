@@ -17,4 +17,5 @@ urlpatterns = [
     path('issuebook', views.issuebook, name='issuebook'),
     path('issuedbooks', views.viewissuedbook, name='viewissuedbook'),
     path('books', views.viewbook, name='viewbook'),
+    path('addbook', views.addBook, name='addbook'),
 ]
