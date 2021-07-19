@@ -4,9 +4,9 @@ from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 # Create your views here.
-from .models import Book
-from .forms import CreateSignupForm, UserUpdateForm
-from.filters import BookFilter
+from .models import *
+from .forms import CreateSignupForm, UserUpdateForm,BookForm
+from .filters import BookFilter
 
 def index(request):
     return render(request, 'pages/index.html')
@@ -64,17 +64,31 @@ def logoutuser(request):
     logout(request)
     return redirect('index')
 
-def updateuser(request):
+@login_required(login_url='adminlogin')
+def adminupdate(request):
     if request.method == 'POST':
         form = UserUpdateForm(request.POST,instance=request.user)
         if form.is_valid():
             form.save()
             messages.success(request,'Account information updated successfully')
-            return redirect('updateuser')
+            return redirect('adminupdate')
     else:
         form = UserUpdateForm(instance=request.user)
     context = {'form3':form}
-    return render(request, 'pages/updateuser.html',context)
+    return render(request, 'pages/adminupdate.html',context)
+
+@login_required(login_url='studentlogin')
+def studentupdate(request):
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST,instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request,'Account information updated successfully')
+            return redirect('studentupdate')
+    else:
+        form = UserUpdateForm(instance=request.user)
+    context = {'form3':form}
+    return render(request, 'pages/studentupdate.html',context)
 
 @login_required(login_url='adminlogin')
 def adminpage(request):
@@ -84,13 +98,6 @@ def adminpage(request):
 def studentpage(request):
     return render(request,'pages/studentpage.html')
 
-@login_required(login_url='adminlogin')
-def bookadded(request):
-    return render(request,'pages/bookadded.html')
-
-@login_required(login_url='adminlogin')
-def bookissued(request):
-    return render(request,'pages/bookissued.html')
 
 @login_required(login_url='adminlogin')
 def issuebook(request):
@@ -100,10 +107,43 @@ def issuebook(request):
 def viewissuedbook(request):
     return render(request,'pages/viewissuedbook.html')
 
-def viewbook(request):
+@login_required(login_url='adminlogin')
+def adminbooks(request):
     books = Book.objects.all()
     count = Book.objects.all().count()
     myFilter = BookFilter(request.GET,queryset=books)
     books = myFilter.qs
     context={'books':books,'count':count,'myFilter':myFilter}
-    return render(request, 'pages/viewbook.html',context)
+    return render(request, 'pages/adminbooks.html',context)
+
+@login_required(login_url='studentlogin')
+def studentbooks(request):
+    books = Book.objects.all()
+    count = Book.objects.all().count()
+    myFilter = BookFilter(request.GET,queryset=books)
+    books = myFilter.qs
+    context={'books':books,'count':count,'myFilter':myFilter}
+    return render(request, 'pages/studentbooks.html',context)
+
+@login_required(login_url='adminlogin')
+def addBook(request):
+    if request.method == 'POST':
+        add_book = BookForm(request.POST)
+        if add_book.is_valid():
+            add_book.save()
+            return redirect('adminbooks')
+    context = {'form' : BookForm()}
+    return render(request, 'pages/addbook.html', context)
+
+@login_required(login_url='adminlogin')
+def updatebook(request,id):
+    book_id = Book.objects.get(id=id)
+    if request.method == 'POST':
+        book_save = BookForm(request.POST, instance=book_id)
+        if book_save.is_valid():
+            book_save.save()
+            return redirect('adminbooks')
+    else:
+        book_save = BookForm(instance=book_id)
+    context = {'form4' : book_save}
+    return render(request, 'pages/updatebook.html', context)
