@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Sign up</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<style type="text/css">
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body{
+  background-color: #b7daf1;
+}
+
+.center{
+    position: absolute;
+    top: 54%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 450px;
+    height: 585px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 10px 10px 15px rgba(0,0,0,0.05);
+  }
+  .center h1{
+    text-align: center;
+    padding: 20px 0;
+    border-bottom: 1px solid silver;
+  }
+  .center form{
+    padding: 0 40px;
+    box-sizing: border-box;
+  }
+  form .TextField{
+    position: relative;
+    border-bottom: 2px solid #adadad;
+    margin: 30px 0;
+  }
+  .TextField input{
+    width: 100%;
+    padding: 0 5px;
+    height: 40px;
+    font-size: 16px;
+    border: none;
+    background: none;
+    outline: none;
+  }
+  .TextField label{
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    color: #adadad;
+    transform: translateY(-50%);
+    font-size: 16px;
+    pointer-events: none;
+    transition: .5s;
+  }
+  .TextField span::before{
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: #2691d9;
+    transition: .5s;
+  }
+  .TextField input:focus ~ label,
+  .TextField input:valid ~ label{
+    top: -5px;
+    color: #2691d9;
+  }
+  .TextField input:focus ~ span::before,
+  .TextField input:valid ~ span::before{
+    width: 100%;
+  }
+
+  input[type="submit"]{
+    width: 100%;
+    height: 50px;
+    border: 1px solid;
+    background: #2691d9;
+    border-radius: 25px;
+    font-size: 18px;
+    color: #e9f4fb;
+    font-weight: 700;
+    cursor: pointer;
+    outline: none;
+  }
+  input[type="submit"]:hover{
+    border-color: #2691d9;
+    transition: .5s;
+  }
+  .signup_link{
+    margin: 20px;
+    text-align: center;
+    font-size: 16px;
+    color: #666666;
+  }
+  </style>
+  </head>
+  <body>
+{% include "parts/navbar.html" %}
+<br>
+<br>
+<div class="center">
+  <h1>Admin Sign Up</h1>
+  <form method="POST">
+    {% csrf_token %}
+    <div class="TextField">
+      {{form1.first_name}}
+      <span></span>
+      <label>First Name</label>
+    </div>
+    <div class="TextField">
+      {{form1.last_name}}
+      <span></span>
+      <label>Last Name</label>
+    </div>
+    <div class="TextField">
+      {{form1.username}}
+      <span></span>
+      <label>Username</label>
+    </div>
+    <div class="TextField">
+      {{form1.email}}
+      <span></span>
+      <label>Email</label>
+    </div>
+    <div class="TextField">
+      {{form1.password1}}
+      <span></span>
+      <label>Password</label>
+    </div>
+    <div class="TextField">
+      {{form1.password2}}
+      <span></span>
+      <label>Retype Your Password</label>
+    </div>
+    <input type="submit" value="Sign Up">
+    {% for message in messages %}
+		  <p id="message">{{message}}</p>
+		{% endfor %}
+    {{form1.errors}}
+    <div class="signup_link">Already have an account? <a href="{% url 'adminlogin' %}">Login Here</a></div>
+    </form>
+</div>
+</body>
+</html>
